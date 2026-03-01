@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Examen Illinois con Audio - Leyes de transito</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #eef2f7; padding: 20px; line-height: 1.6; }
+        .container { max-width: 850px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 5px; }
+        .instrucciones { text-align: center; color: #7f8c8d; margin-bottom: 30px; }
+        .pregunta-bloque { margin-bottom: 25px; padding: 20px; border-radius: 8px; border: 1px solid #dee2e6; background: #fff; position: relative; }
+        .pregunta-texto { font-weight: bold; font-size: 1.1em; display: block; margin-bottom: 15px; color: #34495e; padding-right: 100px; }
+        .btn-audio { position: absolute; top: 20px; right: 20px; background: #3498db; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 14px; }
+        .btn-audio:hover { background: #2980b9; }
+        .opciones label { display: block; margin-bottom: 10px; cursor: pointer; padding: 10px; border-radius: 5px; transition: background 0.2s; }
+        .opciones label:hover { background: #f8f9fa; }
+        .opciones input { margin-right: 10px; transform: scale(1.2); }
+        .btn-calificar { display: block; width: 100%; padding: 18px; background-color: #27ae60; color: white; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; cursor: pointer; margin-top: 30px; transition: 0.3s; }
+        .btn-calificar:hover { background-color: #219150; box-shadow: 0 5px 15px rgba(39,174,96,0.3); }
+        #resultado { margin-top: 25px; padding: 20px; border-radius: 8px; display: none; text-align: center; font-size: 24px; font-weight: bold; background: #34495e; color: white; }
+        .feedback { margin-top: 10px; padding: 8px; border-radius: 4px; font-weight: bold; }
+        .correcta { color: #27ae60; background: #e8f5e9; }
+        .incorrecta { color: #e74c3c; background: #ffebee; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Leyes de transito</h1>
+    <p class="instrucciones">Presiona el botón azul "🔊 Escuchar" para oír la pregunta y sus opciones.</p>
+    
+    <form id="examenForm">
+        <div id="preguntas-contenedor"></div>
+        <button type="button" class="btn-calificar" onclick="calificar()">CALIFICAR EXAMEN</button>
+    </form>
+    
+    <div id="resultado"></div>
+</div>
+
+<script>
+const bancoPreguntas = [
+    { q: "1. Al rebasar a otro vehículo, un conductor debe esperar hasta que todo el automóvil esté visible en el espejo retrovisor antes de volver al carril de la derecha.", options: ["Verdadero", "Falso"], a: 0 },
+    { q: "2. Después de hacer una parada adecuada, está permitido que los conductores giren a la izquierda en un semáforo en rojo de una calle de un solo sentido hacia otra calle de un solo sentido hacia la izquierda.", options: ["Verdadero", "Falso"], a: 0 },
+    { q: "3. ¿Cómo debe avanzar un conductor si dentro de una intersección espera para girar a la izquierda y el semáforo se pone rojo?", options: ["Esperar en la intersección hasta que la luz cambie a verde.", "Ceder el paso al tránsito y luego complete el giro.", "Asegurarse que está despejado, y luego retroceder."], a: 1 },
+    { q: "4. En una carretera de dos carriles, los conductores deben detenerse al acercarse a un autobús escolar con luces rojas intermitentes y brazo de señal de alto extendido.", options: ["Verdadero", "Falso"], a: 0 },
+    { q: "5. Cuando un vehículo autorizado que usa sirenas y luces se acerca, el conductor debe acercarse al borde derecho de la carretera y ceder el paso.", options: ["Verdadero", "Falso"], a: 0 },
+    { q: "6. ¿Cuál es la sanción por rebasar ilegalmente un autobús escolar detenido?", options: ["Una suspensión de los privilegios de conducir.", "Una suspensión del registro del vehículo.", "Una multa de 30 dólares."], a: 0 },
+    { q: "7. Un conductor puede rebasar a otro vehículo conduciendo por el arcén de la carretera.", options: ["Verdadero", "Falso"], a: 1 },
+    { q: "8. Está permitido girar a la derecha con el semáforo con luz roja después de detenerse y ceder el paso.", options: ["Verdadero", "Falso"], a: 0 },
+    { q: "9. Un conductor debe dar la señal de giro a la derecha o izquierda al cambiar de carril.", options: ["Verdadero", "Falso"], a: 0 },
+    { q: "10. Conductores que salgan de un callejón, edificio o camino privado no necesitan hacer alto total antes de ingresar a la acera.", options: ["Verdadero", "Falso"], a: 1 },
+    { q: "11. ¿A qué distancia se debe dar una señal de giro antes de girar en un distrito comercial o residencial?", options: ["Por lo menos 50 pies.", "Por lo menos 75 pies.", "Más de 100 pies antes de girar."], a: 2 },
+    { q: "12. Un conductor puede avanzar inmediatamente cuando espera en una intersección y la luz del semáforo se pone verde.", options: ["Verdadero", "Falso"], a: 1 },
+    { q: "13. ¿Qué deben hacer los conductores al acercarse a un área de construcción?", options: ["Aumentar la velocidad.", "Reducir la velocidad, cortar comunicaciones telefónicas y ceder el paso.", "Tocar la bocina varias veces."], a: 1 },
+    { q: "14. Los conductores deben ceder el paso a los peatones en un cruce peatonal sin demarcación.", options: ["Verdadero", "Falso"], a: 0 },
+    { q: "15. Es legal usar un dispositivo de manos libres mientras conduce si es mayor de 19 años.", options: ["Verdadero", "Falso"], a: 0 },
+    { q: "16. ¿Por cuál de las siguientes razones debe reducirse la velocidad por debajo del límite?", options: ["Condiciones climáticas desfavorables.", "Aproximarse a una intersección.", "Las dos opciones anteriores."], a: 2 },
+    { q: "17. Los vehículos lentos deben usar el carril de la izquierda, excepto al rebasar o girar.", options: ["Verdadero", "Falso"], a: 1 },
+    { q: "18. ¿Cuándo debe un conductor reducir la velocidad en una zona escolar?", options: ["En días lectivos de 6:30 a.m. a 4 p.m. con niños presentes.", "Los fines de semana.", "Solamente durante el recreo."], a: 0 },
+    { q: "19. Los conductores pueden abrir las puertas del lado del tráfico solo cuando sea seguro y sin interferir.", options: ["Verdadero", "Falso"], a: 0 },
+    { q: "20. Está permitido rebasar en una carretera de doble sentido a menos de 100 pies de una intersección.", options: ["Verdadero", "Falso"], a: 1 },
+    { q: "21. Solo vehículos con placas de discapacidad pueden estacionarse en espacios reservados para ellos.", options: ["Verdadero", "Falso"], a: 0 },
+    { q: "22. Los conductores no pueden meterse en la fila de una procesión fúnebre.", options: ["Verdadero", "Falso"], a: 0 },
+    { q: "23. Después de ser detenido por la policía, un conductor debe salir inmediatamente del vehículo.", options: ["Verdadero", "Falso"], a: 1 },
+    { q: "24. Si necesitan buscar el seguro en la guantera, deben avisarle al oficial antes de hacerlo.", options: ["Verdadero", "Falso"], a: 0 },
+    { q: "25. ¿A cuántos pies del riel más cercano de un cruce de ferrocarril deben detenerse los vehículos?", options: ["Entre 15 y 50 pies.", "Entre 5 y 10 pies.", "A 10 pies."], a: 0 },
+    { q: "26. Al acercarse a un cruce ferroviario sin señales, el conductor debe mirar, escuchar y reducir velocidad.", options: ["Verdadero", "Falso"], a: 0 }
+];
+
+const contenedor = document.getElementById('preguntas-contenedor');
+
+bancoPreguntas.forEach((p, i) => {
+    let opcionesTexto = p.options.join(". ");
+    let textoCompleto = `${p.q} Opciones: ${opcionesTexto}`;
+    
+    let html = `
+    <div class="pregunta-bloque">
+        <button type="button" class="btn-audio" onclick="leer('${textoCompleto.replace(/'/g, "")}')">🔊 Escuchar</button>
+        <span class="pregunta-texto">${p.q}</span>
+        <div class="opciones">`;
+    
+    p.options.forEach((opt, index) => {
+        html += `<label><input type="radio" name="p${i}" value="${index}"> ${opt}</label>`;
+    });
+    
+    html += `</div><div id="res-p${i}" class="feedback" style="display:none;"></div></div>`;
+    contenedor.innerHTML += html;
+});
+
+function leer(texto) {
+    window.speechSynthesis.cancel(); // Detiene cualquier audio previo
+    const lectura = new SpeechSynthesisUtterance(texto);
+    lectura.lang = 'es-US';
+    lectura.rate = 0.9; // Velocidad un poco más lenta para claridad
+    window.speechSynthesis.speak(lectura);
+}
+
+function calificar() {
+    let score = 0;
+    bancoPreguntas.forEach((p, i) => {
+        const seleccion = document.querySelector(`input[name="p${i}"]:checked`);
+        const feedback = document.getElementById(`res-p${i}`);
+        feedback.style.display = "block";
+        
+        if (seleccion && parseInt(seleccion.value) === p.a) {
+            score++;
+            feedback.innerHTML = "✓ Correcta";
+            feedback.className = "feedback correcta";
+        } else {
+            feedback.innerHTML = "✗ Incorrecta. La respuesta correcta era: " + p.options[p.a];
+            feedback.className = "feedback incorrecta";
+        }
+    });
+    
+    const resultDiv = document.getElementById('resultado');
+    resultDiv.style.display = "block";
+    resultDiv.innerHTML = "Puntaje final: " + score + " / " + bancoPreguntas.length;
+    window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
