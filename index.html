@@ -4,7 +4,9 @@
 
   <style>
     body{
-      background-color: rgb(252, 250, 250);
+      display: flex;
+      flex-direction: column;
+      background-color: rgb(181, 185, 176);
     }
 
     header{
@@ -12,11 +14,14 @@
       justify-content: center;
     }
 
+    #illinois-sign{
+      width: 1200px;
+      height: 600px;
+    }
 
-    .manual-button{
-      text-align: center;
-      font-size: 100px;
-      color: rgb(13, 14, 14);
+
+    #manual-link img{
+      width: 500px;
     }
 
     .h2-instruccions{
@@ -26,24 +31,27 @@
     }
 
     h3{
+      margin-top: -40px;
       color: rgb(7, 0, 0);
       text-align: center;
       font-size: 30px;
     }
 
     h4{
+      margin-top: -20px;
       color: rgb(9, 5, 5);
       text-align: center;
       font-size: 30px;
     }
 
     h5{
+      margin-top: -30px;
       color: red;
       text-align: center;
       font-size: 40px;}
 
     button{
-      background-color: rgb(69, 183, 7);
+      background-color: rgba(4, 68, 196, 0.717);
       font-size: 40px;
       padding: 20px;
       font-weight: bold;
@@ -65,10 +73,9 @@
   </style>
 
 <header>
-  <a href="https://www.ilsos.gov/content/dam/publications/pdf_publications/dsd_a113.pdf">
-    <button class="manual-button">Manual de conducir 2026</button>
-  </a>
-</button>
+  
+  <img id="illinois-sign" src= "illinoissign.PNG" alt= "A green welcome sign to Illinois">
+
 </header>
 
 <body>
@@ -94,5 +101,10 @@
   <a href="https://mvargas2599.github.io/Manual-de-conducir-2026/Accidentes%20de%20transito.html">
     <button>Infracciones de transito/accidentes de transito</button>
   </a>
+
+  <a id="manual-link" href="https://www.ilsos.gov/content/dam/publications/pdf_publications/dsd_a113.pdf">
+    <img src="manualcover.jpg" alt="Cover of the Illinois Rules of the road">
+  </a>
+</button>
 </body>
 </html>
