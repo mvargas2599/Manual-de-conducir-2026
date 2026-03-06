@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<meta charset="utf-8">
-
   <style>
     body{
       display: flex;
       flex-direction: column;
+      align-items: center;
       background-color: rgb(181, 185, 176);
     }
 
@@ -16,19 +15,17 @@
 
     #illinois-sign{
       width: 1200px;
-      height: 600px;
     }
 
 
     #manual-link img{
-      width: 500px;
+      width: 250px;
     }
 
     .h2-instruccions{
-      display: flex;
-      justify-content: center;
       color: rgb(12, 11, 11);
       text-align: center;
+      flex-wrap: wrap;
       font-size: 50px;
     }
 
@@ -40,13 +37,15 @@
     }
 
     h4{
-      margin-top: -20px;
+      margin-top: 15px;
       color: rgb(9, 5, 5);
       text-align: center;
       font-size: 30px;
     }
 
     h5{
+      display: flex;
+      justify-content: center;
       margin-top: -30px;
       color: red;
       text-align: center;
@@ -66,6 +65,7 @@
       margin-left: 1px;
       margin-top: 2px;
       margin-bottom: 2px;
+
     }
     button:hover{
       opacity: 0.8;
@@ -75,8 +75,10 @@
   </style>
 
 <header>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width", initial-scale="1.0">
   
-  <img id="Illinois-sign" src= "Illinoissign.PNG" alt= "A green welcome sign to Illinois">
+  <img id="illinois-sign" src= "illinoissign.PNG" alt= "A green welcome sign to Illinois">
 
 </header>
 
@@ -86,6 +88,11 @@
   <h5>Y RECUERDA! SI VAS AL LIMITE, GET OUT THE WAY MADAFACKER!</h5>
   
   <h3>Dale "click" al "Manual de conducir 2025", para ver el manual.</h3>
+
+  <a id="manual-link" href="https://www.ilsos.gov/content/dam/publications/pdf_publications/dsd_a113.pdf">
+    <img src="manualcover.jpg" alt="Cover of the Illinois Rules of the road">
+  </a>
+
   <h4>Dale "click" a cualquier "capitulo" para empezar el questionario.</h4>
 
    <a href="https://mvargas2599.github.io/Manual-de-conducir-2026/Leyes%20de%20transito.html">
@@ -104,9 +111,6 @@
     <button>Infracciones de transito/accidentes de transito</button>
   </a>
 
-  <a id="manual-link" href="https://www.ilsos.gov/content/dam/publications/pdf_publications/dsd_a113.pdf">
-    <img src="manualcover.jpg" alt="Cover of the Illinois Rules of the road">
-  </a>
 </button>
 </body>
 </html>
