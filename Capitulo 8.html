@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Capitulo 8</title>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Revocación, Suspensión, Denegación y Cancelación de Licencias de conducir</h1>
+    <p class="instrucciones">Presiona el botón azul "🔊 Escuchar" para oír la pregunta y sus opciones.</p>
+    
+    <form id="examenForm"> 
+        <div id="preguntas-contenedor"></div>
+        <button type="button" class="btn-calificar" onclick="calificar()">CALIFICAR EXAMEN</button>
+    </form>
+    
+    <div id="resultado"></div>
+</div>
+
+<script>
+  const bancoPreguntas = [
+    {q: "1. Bajo cuales de las siguientes condiciones pueden suspenderse los privilegios de conducir de una persona?", options: ["A. Tres infaracciones de manejo imprudente en 12 meses.", "B. Arrancones o carreras callejeras.", "C. Transporte ilegal de alcohol a menores de 21 años en dos oportunidades durante 12 meses."], a: 2},
+    {q: "2. Los privie=legios de conducir pueden ser revocados por suministrar informacion falsa a la oficina del Secretario de Estado.", options: ["Verdadero", "Falso"], a: 0},
+    {q: "3. Una licencia de conducir puede ser cancelada si un conductor no tiene aptitud medica o visiual para operar un vehículo de manera segura.", options: ["Verdadero", "Falso"], a: 0},
+    {q: "4. Se pueden otorgar permisos de conducir restringidos a cualquier conductor cuya licencia haya sido suspendida o revocada.", options: ["Verdadero", "Falso"], a: 1},
+    {q: "5. Se puede suspender una licencia de conducir por:", options: ["A. No obedecer una senal de cruce de ferrocarril.", "B. Poseer una licencia de conducir fraudulenta.", "C. No detenerse por un autobus escolar.", "D. Todas las anteriores."], a: 3},
+    {q: "6. Se pueden revocar una licencia de conducir por:", options: ["A. Abandonar la escena de un accidente que hirio o mato a alquien.", "B. Dar infomacion falsa al Secretario de Estado.", "C. Comportamiento imprudente que involucra un vehiculo que provoca lesiones o la muerte de alguien.", "D. Todas las anteriores."], a: 3},
+  ]
+
+  const contenedor = document.getElementById('preguntas-contenedor');
+
+bancoPreguntas.forEach((p, i) => {
+    let opcionesTexto = p.options.join(". ");
+    let textoCompleto = `${p.q} Opciones: ${opcionesTexto}`;
+    
+    let html = `
+    <div class="pregunta-bloque">
+        <button type="button" class="btn-audio" onclick="leer('${textoCompleto.replace(/'/g, "")}')">🔊 Escuchar</button>
+        <span class="pregunta-texto">${p.q}</span>
+        <div class="opciones">`;
+    
+    p.options.forEach((opt, index) => {
+        html += `<label><input type="radio" name="p${i}" value="${index}"> ${opt}</label>`;
+    });
+    
+    html += `</div><div id="res-p${i}" class="feedback" style="display:none;"></div></div>`;
+    contenedor.innerHTML += html;
+});
+
+function leer(texto) {
+    window.speechSynthesis.cancel(); // Detiene cualquier audio previo
+    const lectura = new SpeechSynthesisUtterance(texto);
+    lectura.lang = 'es-US';
+    lectura.rate = 0.9; // Velocidad un poco más lenta para claridad
+    window.speechSynthesis.speak(lectura);
+}
+
+function calificar() {
+    let score = 0;
+    bancoPreguntas.forEach((p, i) => {
+        const seleccion = document.querySelector(`input[name="p${i}"]:checked`);
+        const feedback = document.getElementById(`res-p${i}`);
+        feedback.style.display = "block";
+        
+        if (seleccion && parseInt(seleccion.value) === p.a) {
+            score++;
+            feedback.innerHTML = "✓ Correcta";
+            feedback.className = "feedback correcta";
+        } else {
+            feedback.innerHTML = "✗ Incorrecta. La respuesta correcta era: " + p.options[p.a];
+            feedback.className = "feedback incorrecta";
+        }
+    });
+    
+    const resultDiv = document.getElementById('resultado');
+    resultDiv.style.display = "block";
+    resultDiv.innerHTML = "Puntaje final: " + score + " / " + bancoPreguntas.length;
+    window.scrollTo(0, 0);
+}
+</script>
+
+</body>
+</html>
